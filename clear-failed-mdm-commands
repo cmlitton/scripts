@@ -1,0 +1,15 @@
+# from @neilmartin83
+
+# carefult to check the API calls before using as thing can change
+
+#!/bin/bash
+
+jssurl="https://yourjss.com"
+apiuser="username"
+apipass="password"
+serial=$(ioreg -rd1 -c IOPlatformExpertDevice | awk -F'"' '/IOPlatformSerialNumber/{print $4}')
+computerID=$(curl "$jssurl"/JSSResource/computers/serialnumber/"$serial" -u "$apiuser":"$apipass" -H "Accept: text/xml" | xpath "/computer[1]/general/id/text()")
+
+/usr/bin/curl -sfku "$5":"$6" "$4":8443/JSSResource/commandflush/computers/id/"$computerID"/status/Pending+Failed -X DELETE
+
+exit 0
