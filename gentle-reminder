@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Helper window to ask users to open self service and install macOS Mojave
+
+# Variables
+
+jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
+iconFolder="/System/Library/CoreServices/Install Command Line Developer Tools.app/Contents/Resources/SoftwareUpdate.icns"
+iconSize=120
+
+# possible way to get self service to open by the logged in user.
+LOGGED_IN_USER=$(stat -f%Su /dev/console)
+LOGGED_IN_UID=$(id -u "$LOGGED_IN_USER")
+
+# Message
+
+title="Service Desk"
+heading="Software Updates Required"
+description="Your computer is ready for macOS Mojave. 
+
+Select OK to be taken to Self Service for the upgrade.
+
+Select Later and this window will popup periodically as a reminder."
+
+# Display notification window
+
+RESULT=$("$jamfHelper" \
+-windowType hud \
+-title "$title" \
+-heading "$heading" \
+-alignHeading left \
+-description "$description" \
+-alignDescription left \
+-icon "$iconFolder" \
+-iconSize "$iconSize" \
+-button1 "Ok" \
+-button2 "Later")
+
+
+if [ $RESULT == 0 ]; then
+	# do button1 stuff
+    
+# added /bin/launchctl asuser "$LOGGED_IN_UID" sudo -iu "$LOGGED_IN_USER" infront of the open command
+# self service was not opening so after looking at some Jamf Nation posts, I added this to run as the logged in user
+# 
+
+	echo "OK was pressed!"
+	/bin/launchctl asuser "$LOGGED_IN_UID" sudo -iu "$LOGGED_IN_USER" open "jamfselfservice://xxxxxxxxx=view"
+elif [ $RESULT == 2 ]; then
+	# do button2 stuff
+	echo "Later was pressed!"
+	osascript -e 'tell application (path to frontmost application as text) to display dialog "This reminder will repeat daily until macOS Mojave is installed" buttons {"OK"} with icon stop' 
+fi
+
+exit 0
