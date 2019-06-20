@@ -1,0 +1,30 @@
+# from @nvandam
+
+#!/bin/bash
+#
+# Author: Johan McGwire - Yohan @ Macadmins Slack - Johan@McGwire.tech
+#
+# Description: This script sets all the preference keys for the System Preferences: Software Update setting of 
+#			   "Automatically keep this mac up to date" fully enabled
+
+# System Preferences: Check for updates
+defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticCheckEnabled -bool true
+
+# System Preferences: Download new updates when available
+defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticDownload -bool true
+
+# System Preferences: Install system data files and security updates
+defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist CriticalUpdateInstall -bool true
+defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist ConfigDataInstall -bool true
+
+# System Preferences: Install macOS Updates
+defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticallyInstallMacOSUpdates -bool true
+
+# System Preferences: Install App Updates from the App Store & Automatically keep my Mac up to date
+defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdate -bool true
+
+# No UI for the preference
+defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdateRestartRequired -bool true
+
+# Exiting and returning the result code
+exit $?
