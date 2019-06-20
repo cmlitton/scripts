@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Author: Johan McGwire - Yohan @ Macadmins Slack - Johan@McGwire.tech
+#
+# Description: This script reboots the machine after the defined delay
+
+# Checking if the delay time was sent through the a JAMF Parameter
+if [ -z $4 ];then
+    read -p "Please enter the delay: " delay
+else 
+    delay=$4
+fi
+
+shutdown -r +$delay
+
+exit 0
