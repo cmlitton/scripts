@@ -1,0 +1,33 @@
+# Any good scripts/policies that can query AD 
+# on login, for account expiration dates and present a message to the user if 
+# their account is about to expire or expired?
+
+# from @koalatee
+
+#!/bin/bash
+
+# logged in user
+USERNAME=$( scutil <<< "show State:/Users/ConsoleUser" | awk -F': ' '/[[:space:]]+Name[[:space:]]:/ { if ( $2 != "loginwindow" ) { print $2 }}' )
+
+# last password change date
+lastChange=$(dscl . read /Users/"$USERNAME" \
+    | grep -A1 passwordLastSetTime \
+    | grep real \
+    | awk -F'real>|</real' '{print $2}') 
+# account creation date (if new user / new install)
+creationTime=$(dscl . read /Users/"$USERNAME" accountPolicyData \
+    | grep -A1 creationTime \
+    | grep real \
+    | awk -F'real>|</real' '{print $2}')
+
+lastChangeCompare=$(echo "$lastChange" |cut -c1-8)
+creationTimeCompare=$(echo "$creationTime" |cut -c1-8)
+
+# format to new time
+### date -jf <input format> <input value> +<output format>
+if [[ $lastChangeCompare -eq $creationTimeCompare ]]; then
+    message="This message will update the next time you change your password"
+else # modify +179d for your pw policy
+    expiredate=$(date -j -v +179d -f %s "$lastChange" +"%m/%d/%Y")  
+    message="Your password expires on $expiredate"
+fi
