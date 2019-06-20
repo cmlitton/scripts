@@ -1,0 +1,53 @@
+# from @koalatee
+
+#!/bin/bash <-- use this shebang, not /sh
+## Get all Buildings
+allBuildings=$(curl \
+    -s \
+    -f \
+    -u $apiUser:$apiPass \
+    -X GET $jamf/JSSResource/buildings \
+    -H "Accept: application/xml" \
+    )
+
+# make it alphabetical
+index=0 # start at the bottom
+buildingArray=() # start blank
+buildingArrayFinal=() # again, start blank
+size=$(echo $allBuildings \
+    |xpath //buildings/size \
+    |sed 's/<[^>]*>//g' \
+    )
+# make an array
+while [ $index -lt ${size} ] 
+do 
+    index=$[$index+1]
+    building=$(echo $allBuildings \
+        |xpath //buildings/building[${index}]/name \
+        |sed 's/<[^>]*>//g')
+    buildingArray+=("$building")
+done
+
+# make it alphabetical
+IFS=$'\n' sorted=($(sort <<< "${buildingArray[*]}"))
+unset IFS
+
+# give them the \n
+for item in "${sorted[@]}"
+do
+    buildingArrayFinal+=$"${item}\n"
+done
+
+# remove last \n
+buildingArrayFinal=$(echo $buildingArrayFinal |sed 's/..$//')
+
+# Set building
+Building="$(listChoice \
+    "Make a selection below:" \
+    "Choose Building" \
+    "Cancel" \
+    "OK" \
+    "$buildingArrayFinal")"
+if [[ "$Building" =~ "false" ]]; then
+    echo "user cancelled"
+fi
