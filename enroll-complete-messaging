@@ -1,0 +1,36 @@
+# you can have this script be triggered by enrollmentComplete, which then writes 
+# the launchdaemon to call your current enrollmentComplete policy. it's currently set to run...lots of times, because 
+# reasons. you can modify it to just run once or something, but i needed it to behave slightly differently
+
+# from @matt_h inspired by @yohan
+
+#!/bin/bash
+
+/Library/Application\ Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper -windowType hud -lockHUD -icon /System/Library/CoreServices/Setup\ Assistant.app/Contents/Resources/Assistant.icns -title "Preparing for Provisioning" -description "Software will begin installing shortly. Please be patient." & disown
+
+cat << EOF > /Library/LaunchDaemons/com.yourOrg.Provisioning.plist
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>KeepAlive</key>
+	<true/>
+	<key>Label</key>
+	<string>com.yourOrg.Provisioning</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/local/bin/jamf</string>
+		<string>policy</string>
+		<string>-id</string>
+		<string>$policyIDHere</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+</dict>
+</plist>
+EOF
+
+chown root:wheel /Library/LaunchDaemons/com.yourOrg.Provisioning.plist
+chmod 644 /Library/LaunchDaemons/com.yourOrg.Provisioning.plist
+
+launchctl load /Library/LaunchDaemons/com.yourOrg.Provisioning.plist
