@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Enable automatic download and install of system updates
+# for OS X Yosemite and later.
+ 
+plist_file="/Library/Preferences/com.apple.SoftwareUpdate.plist"
+
+# Enable the following:
+#
+# Automatic background check for macOS software updates
+# Automatic download of macOS software updates
+# Automatic download and installation of XProtect, MRT and Gatekeeper updates
+# Automatic download and installation of automatic security updates
+
+echo "Checking box for Automatically check for updates"
+/usr/bin/defaults write "$plist_file" AutomaticCheckEnabled -bool true
+
+echo "Checking box for Download new updates when available"
+/usr/bin/defaults write "$plist_file" AutomaticDownload -bool true
+
+echo "Checking boxes needed for Installing system and security updates"
+/usr/bin/defaults write "$plist_file" ConfigDataInstall -bool true
+/usr/bin/defaults write "$plist_file" CriticalUpdateInstall -bool true
+
+# For macOS Mojave and later, disable the automatic installation of macOS updates.
+
+echo "Disabling checkbox for Install macOS updates"
+/usr/bin/defaults write "$plist_file" AutomaticallyInstallMacOSUpdates -bool false
+
+# For macOS Maojave and later, disable the 'Automatically keep my Mac up to date'
+
+echo "Disabling main checkbox for Keep my Mac up to date in SysPref > Software Update"
+/usr/bin/defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdate -bool false
+
+echo "All done, exiting"
+exit 0
