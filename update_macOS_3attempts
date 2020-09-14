@@ -117,8 +117,8 @@ We recommend saving any important documents now.
 Your Mac will reboot in order to complete the update."
 
            "$JAMFHelperPath" -windowType utility -title "$JAMFHelperTitle" \
-           -icon "$JAMFHelperIcon" -iconSize 128 -heading "$JAMFHelperHeading" -alignHeading left -description "$installMSG" \
-           -alignDescription center -timeout 15
+           -icon "$JAMFHelperIcon" -iconSize 128 -heading "$JAMFHelperHeading" -alignHeading center -description "$installMSG" \
+           -alignDescription left -timeout 15
            echo "Forced update of $macOSName $macOSVersion Happening"
            jamfHelperPID=$(pgrep jamfHelper)
            disown "$jamfHelperPID"
@@ -136,8 +136,8 @@ This is user installation attempt $UpdateAttempts of $TotalAttempts.
 Attempt $FinalChance will install $macOSName automatically and your machine will restart."
 
            UserResponse=$("$JAMFHelperPath" -windowType utility -title "$JAMFHelperTitle" \
-               -icon "$JAMFHelperIcon" -iconSize 128 -heading "$JAMFHelperHeading" -alignHeading left -description "$InformativeTextMsg" \
-               -alignDescription center -button1 "Install" -button2 "Cancel" -cancelButton 2 )
+               -icon "$JAMFHelperIcon" -iconSize 128 -heading "$JAMFHelperHeading" -alignHeading center -description "$InformativeTextMsg" \
+               -alignDescription left -button1 "Install" -button2 "Cancel" -cancelButton 2 )
                 if [ "$UserResponse" == 2 ]
                 then
                    /bin/echo $UpdateAttempts > $UpdateAttemptsFile
@@ -270,8 +270,8 @@ FinalRebootMessage="Your computer will begin the upgrade in 1 minute.
 Please save all work and quit all applications now."
 
 "$JAMFHelperPath" -windowType utility -title "$JAMFHelperTitle" \
--icon "$JAMFHelperIcon" -iconSize 128 -heading "$JAMFHelperHeading" -alignHeading left -description "$RebootMsg" \
--alignDescription center -button1 "Reboot" > /tmp/UserInput &
+-icon "$JAMFHelperIcon" -iconSize 128 -heading "$JAMFHelperHeading" -alignHeading center -description "$RebootMsg" \
+-alignDescription left -button1 "Reboot" > /tmp/UserInput &
 
 ## While loop to run for at least 300 interactions (which equals 5 mins) while checking certain conditions.
 ## We inject a 1 second sleep command into each run of the while loop to approximate 5 minutes. If we did not
@@ -302,8 +302,8 @@ elif [ "$Counter" == 60 ]
      disown "$jamfHelperUID"
      killall jamfHelper
      "$JAMFHelperPath" -windowType utility -title "$JAMFHelperTitle" \
-     -icon "$JAMFHelperIcon" -iconSize 96 -heading "$JAMFHelperHeading" -alignHeading left -description "$FinalRebootMessage" \
-     -alignDescription center &
+     -icon "$JAMFHelperIcon" -iconSize 96 -heading "$JAMFHelperHeading" -alignHeading center -description "$FinalRebootMessage" \
+     -alignDescription left &
 fi
 sleep 1
 Counter=$((Counter - 1))
