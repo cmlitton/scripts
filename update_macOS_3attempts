@@ -24,8 +24,7 @@ macOSName="Catalina"
 #Version of the macOS to be installed
 macOSVersion="10.15.6"
 
-#Version of the macOS to be installed
-macOSBuild="19G2006"
+
 
 ## Current logged in user
 loggedInUser=""
@@ -50,6 +49,8 @@ JAMFHelperHeading="$macOSName Update Ready"
 
 ##  Get minor version of OS X
 osVers=$( sw_vers -productVersion | cut -d. -f2 )
+
+Test=$(1)
 
 ##   Set appropriate Restart icon depending on OS version
 
