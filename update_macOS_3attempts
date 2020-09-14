@@ -24,8 +24,6 @@ macOSName="Catalina"
 #Version of the macOS to be installed
 macOSVersion="10.15.6"
 
-
-
 ## Current logged in user
 loggedInUser=""
 
@@ -50,36 +48,7 @@ JAMFHelperHeading="$macOSName Update Ready"
 ##  Get minor version of OS X
 osVers=$( sw_vers -productVersion | cut -d. -f2 )
 
-Test=$(1)
 
-##   Set appropriate Restart icon depending on OS version
-
-# appears unused in this script
-# if [[ "$osVers" -ge "9" ]]; then
-#    restartIcon="/System/Library/CoreServices/loginwindow.app/Contents/Resources/Restart.tiff"
-#    else
-#    restartIcon="/System/Library/CoreServices/loginwindow.app/Contents/Resources/Restart.png"
-# fi
-
-## Set the installAllAtLogin flag here to 'yes' or leave it blank (equivalent to 'no')
-## Function: When the script is run on a Mac that is at the login window, if the flag is set to 'yes',
-## it will lock the login window to prevent unintended logins and proceed to install all available updates.
-## Once completed, the login window will either be unlocked in the case of no restarts needed,
-## or a restart will be done immediately to complete the installations.
-
-# appears unused in this script
-# installAllAtLogin="yes"
-
-## Set the Organization/Department/Division name. Used in dialog titles
-
-# appears unused in this script
-#orgName="Primerica"
-
-## Set the number of minutes until reboot (only used if installations require it)
-## Special note: Only full integers can be used. No decimals.
-
-# appears unused in this script
-#minToRestart=5
 ## If the file containing the number of software update attempts does not exist or has a size
 ## of zero bytes then set the number of update attempts to zero by writing just a zero to the file
 if [ ! -s "$UpdateAttemptsFile" ]
@@ -92,39 +61,11 @@ UpdateCount=$(/bin/cat $UpdateAttemptsFile)
 
 ## Final Variables
 
+jamfBinary="/usr/local/bin/jamf"
 
 ################################ End Define Global Variables ############################
 #########################################################################################
 
-
-
-
-
-#########################################################################################
-################################## JAMF Binary Check  ###################################
-
-## This if statement is designed to check for the location of the jamf binary in multiple
-## places due to changes in OSX associated with JAMF's upgrade to version 9.81
-## References to the JAMF Binary must be changed to "$jamfBinary"
-## Added 12/1/15 by tomr
-##
-if [ -e /usr/local/jamf/bin/jamf ]
-   then
-      # JAMF Binary found at 9.81 or later location
-      echo "JAMF Binary found at 9.81 or later location"
-      jamfBinary="/usr/local/jamf/bin/jamf"
-      #
-   elif [ -e /usr/local/bin/jamf ]
-   then
-      # Alias to the JAMF Binary found
-      echo "Alias to the JAMF Binary found"
-      jamfBinary="/usr/local/bin/jamf"
-      #
-   else
-   echo "JAMF Binary not found"
-fi
-################################### End JAMF Binary Check ###############################
-#########################################################################################
 
 #########################################################################################
 #################################### Battery Power Check ################################
