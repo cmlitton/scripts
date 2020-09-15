@@ -8,8 +8,18 @@
 ### This script assumes the Full Install macOS Installer in already located in /Applications
 ### Also free availabel sapce is accounted for in the Scope of the policy
 
-# A dummy receipt is also created to be used in conjunction with a smart group
-### to present the installer in Self Service.
+### Original script from trice81384
+### https://github.com/trice81384/scripts/blob/master/JAMFProScripts/macOSUpgrades
+
+### Modified by M. Litton 09/15/2020
+### - removed some variables related to caching the installer as we pre-install in /applications
+### - set macOSIsCached to 'Yes' as the installer already exists in /Applciations
+### - removed restart icon code - wasnt called anywhere else in script
+### - removed App Store Download Check as installer already exisits in /Applications
+### - removed macOSCache Check as installer already exisits in /Applications
+### - removed Free Space Check as this is checked from Smart Group
+### - added startosinstall command instead of code under 'Call the Installer'
+
 
 #########################################################################################
 ################################ Define Global Variables ################################
