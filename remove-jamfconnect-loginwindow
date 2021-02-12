@@ -1,0 +1,9 @@
+#!/bin/zsh
+# Wait for Finder
+while ! pgrep -xq Finder; do
+    echo "waiting for Finder"
+    sleep 10
+done
+
+# disable Jamf Connect
+/usr/local/bin/authchanger -reset
