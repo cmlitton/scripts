@@ -7,3 +7,9 @@ done
 
 # disable Jamf Connect
 /usr/local/bin/authchanger -reset
+
+
+
+#Script removes the Jamf Connect Login Window after a computers reached the Desktop (Finder)
+#- Using this method, new account creation can be used with Jamf Connect during enrollment, then after account creation and user is at Finder, Jamf Connect is turned off and only the Menubar is made available.
+#- https://www.jamf.com/jamf-nation/articles/682/using-filevault-with-jamf-connect
